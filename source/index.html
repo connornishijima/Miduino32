@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Tutorialzine Electron Experiment</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+	<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+	<script>window.$ = window.jQuery = require('./js/jquery.min.js');</script>
+	<script src="./js/script.js"></script>
+</head>
+<body>
+	<div id="kill" onclick="kill_app();">
+		<img src="img/close.png" />
+	</div>
+	<div id="drag"></div>
+	<div id="loading">
+		<div id="load_title">
+			PROCESSING...
+		</div>
+	</div>
+	<div id="content">
+		<div id="logo">
+			<img src="img/logo.png" />
+		</div>
+		<div id="start_page">
+			<div id="file">
+				<span id="filename">Pick a MIDI file...</span>
+				<span id="filepick" onclick="pick_file();">CHANGE</span>
+			</div>
+			<div class="settings_row">
+				<div class="setting_area">
+					<div class="setting_title">
+						DUTY CYCLE
+					</div>
+					<select id="PWM_TYPE" class="setting">
+						<option class="drop" value="DUTY_12">12.5%</option>
+						<option class="drop" value="DUTY_25">25%</option>
+						<option class="drop" value="DUTY_50">50%</option>
+						<option class="drop" value="DUTY_75">75%</option>
+						<option class="drop" selected value="DUTY_PITCH">PITCH</option>
+						<option class="drop" value="DUTY_PITCH_REVERSE">PITCH (REV)</option>
+					</select>
+				</div>
+				<div class="setting_area" style="width:200px">
+					<div class="setting_title">
+						VIBRATO HZ: <span id="vibrato_hz_meter"></span>
+					</div>
+					<input id="vibrato_hz" type="range" min="0" max="30" value="5"></input>
+				</div>
+				<div class="setting_area" style="width:200px">
+					<div class="setting_title">
+						VIBRATO INTENSITY: <span id="vibrato_intensity_meter"></span>
+					</div>
+					<input id="vibrato_intensity" type="range" min="0" max="255" value="50"></input>
+				</div>
+			</div>
+			<div class="settings_row">
+				<div class="setting_area">
+					<div class="setting_title">
+						NOTE DROP METHOD
+					</div>
+					<select id="DROP_MODE" class="setting">
+						<option class="drop" selected value="FAVOR_NEW">FAVOR NEW NOTES</option>
+						<option class="drop" value="FAVOR_OLD">FAVOR OLD NOTES</option>
+					</select>
+				</div>
+				<div class="setting_area">
+					<div class="setting_title">
+						LOOP FOREVER?
+					</div>
+					<select id="LOOPING" class="setting">
+						<option class="drop" selected value="0">PLAY ONCE</option>
+						<option class="drop" value="1">LOOP FOREVER</option>
+					</select>
+				</div>
+				<div class="setting_area">
+					<div class="setting_title">
+						REMOVE DUPLICATE NOTES?
+					</div>
+					<select id="DUPLICATE" class="setting">
+						<option class="drop" selected value="1">YES</option>
+						<option class="drop" value="0">NO</option>
+					</select>
+				</div>
+			</div>
+			<br><br>
+			<button id="process" onclick="process_midi();">PROCESS</button>
+		</div>
+		<div id="result_page">
+			<div id="score"></div>
+			<div id="score_overlay"></div>
+			<button id="copy_sketch" onclick="copy_sketch();">COPY SKETCH</button>
+			<button id="copy_header" onclick="copy_header();">COPY HEADER</button>
+			<button id="copy_score"  onclick="copy_score();">COPY SCORE</button>
+			<div id="alert">ALERT</div>
+			<button id="restart"  onclick="begin();">START OVER</button>
+		</div>
+	</div>
+	<div id="temp_data"></div>
+</body>
+</html>
