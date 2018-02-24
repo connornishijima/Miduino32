@@ -3,6 +3,8 @@
 const remote = require('electron').remote;
 var dialog = remote.dialog;
 
+var debug_info = [];
+
 function kill_app(){
 	var window = remote.getCurrentWindow();
     window.close();
@@ -17,7 +19,18 @@ function parse_result(result){
 	}
 }
 
+function get_debug(result){
+	result_type = result.split("%|%")[0];
+	result_line = result.split("%|%")[1].replace(/(\r\n|\n|\r)/gm,"");;
+	if(result_type == "DEBUG"){
+		debug_info.push(result_line);
+	}
+}
+
 function process_midi(){
+	debug_info = [];
+	var start_time = Math.round((new Date()).getTime());
+	var elapsed = -1;
 	start_overlay("PROCESSING...");
 	filepath = $("#filename").html();
 	
@@ -29,15 +42,40 @@ function process_midi(){
 	};
 
 	PythonShell.run('miduino.py', options, function (err, results) {
+		var end_time = Math.round((new Date()).getTime());
+		elapsed = (end_time-start_time)/1000.0;
+		
+		for(x in results){
+			get_debug(results[x]);
+		}
+		
+		removed_duplicates = -1;
+		dropped_notes = -1;
+		used_voices = "";
+		for(x in debug_info){
+			debug_line = debug_info[x].split(':');
+			if(debug_line[0] == "dropped_notes"){
+				dropped_notes = debug_line[1];
+			}
+			else if(debug_line[0] == "removed_duplicates"){
+				removed_duplicates = debug_line[1];
+			}
+			else if(debug_line[0] == "voices_used"){
+				used_voices = debug_line[1];
+			}
+		}
+			
 		if (err) throw err;
 		// results is an array consisting of messages collected during execution
 		$("#start_page").fadeOut("fast",function(){
 			end_overlay();
 			$("#result_page").fadeIn("fast");
 			$("#temp_data").show();
+			
+			show_alert("Dropped "+dropped_notes+" notes, removed "+removed_duplicates+" duplicates. Voices: "+used_voices);
 		});
 		$("#logo").animate({ 'marginTop': '50px'}, 500);
-		$("#score").html('#include "Miduino.h"<br>'+
+		$("#score").html('#include "Miduino.h"              // Conversion took '+elapsed+' seconds! Dropped '+dropped_notes+' notes, removed '+removed_duplicates+' duplicates. Voices: '+used_voices+'<br>'+
 						 'Miduino mid(4,5,12,13,14,15);     // Output pins<br>'+
 						 '<br>'+
 						 'uint8_t PWM_TYPE          = '+$("#PWM_TYPE").val()+';<br>'+
@@ -50,7 +88,20 @@ function process_midi(){
 		for(x in results){
 			parse_result(results[x]);
 		}
-		$("#score").html($("#score").html()+"<br><br>void setup(){<br>&nbsp;&nbsp;mid.play_song(SCORE,PWM_TYPE,VIBRATO_HZ,VIBRATO_INTENSITY,VIBRATO_RAMP_MS,VIBRATO_HOLD_MS,SPEED_MULTIPLIER);<br>}<br><br>void loop(){<br>}");
+		output = $("#score").html() +"<br>";
+		
+		output+="<span style='color:#ff5c93;'>void setup</span>(){<br>";
+		output+="&nbsp;&nbsp;mid.play_song(SCORE,PWM_TYPE,VIBRATO_HZ,VIBRATO_INTENSITY,VIBRATO_RAMP_MS,VIBRATO_HOLD_MS,SPEED_MULTIPLIER);<br>";
+		output+="&nbsp;&nbsp;while (mid.song_playing == true) {<br>";
+		output+="&nbsp;&nbsp;&nbsp;&nbsp;mid.run_score(SCORE, PWM_TYPE, SPEED_MULTIPLIER);<br>";
+		output+="&nbsp;&nbsp;&nbsp;&nbsp;yield(); // Add your own code (to run during playback) above this line,<br>";
+		output+="&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// but keep it brief to let the music run!<br>";
+		output+="&nbsp;&nbsp;}<br>";
+		output+="}<br>";
+		output+="<br>";
+		output+="<span style='color:#ff5c93;'>void loop</span>(){<br>";
+		output+="}";
+		$("#score").html(output);
 	});
 }
 
@@ -66,7 +117,7 @@ function show_alert(message){
 	$("#alert").show();
 	setTimeout(function(){
 		$("#alert").fadeOut("slow");
-	},1000);
+	},5000);
 }
 
 function SelectText(el, win) {
@@ -139,10 +190,11 @@ function pick_file(){
 		{ name: 'MIDI Files', extensions: ['mid','midi'] }
 	]},
 	function (fileNames) {
-		if (fileNames === undefined) return;
+		if (fileNames === undefined){
+			pick_file();
+		}
 		var fileName = fileNames[0];
 		$("#filename").html(fileName);
-		$("#filepick").show();
 		end_overlay();
 	});
 }

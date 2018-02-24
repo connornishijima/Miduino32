@@ -21,7 +21,7 @@ body{
 
 #temp_data{
 	//display:none;
-	z-index:100000;
+	white-space: pre;
 }
 
 #drag{
@@ -89,7 +89,6 @@ body{
 #filepick{
 	color:#FF5C93;
 	cursor:pointer;
-	display:none;
 }
 
 #loading{
@@ -106,7 +105,7 @@ body{
 #load_title{
 	text-align:center;
 	font-size:30px;
-	padding-top:380px;
+	padding-top:400px;
 }
 
 #score{
