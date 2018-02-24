@@ -1,6 +1,6 @@
 # Miduino GUI
 
-When paired with the Miduino.h Arduino Library, this GUI is the easiest way to get chiptunes running on an ESP8266! Just choose a MIDI file as an input and it will be automatically converted to Arduino-friendly code, playable as square waves!
+Miduino is almost as it sounds: a MIDI music to Arduino code converter. Using this GUI you can drop in any MIDI file, tweak some settings, and out comes Arduino-ready code for an ESP8266 to play the music you picked! Using hardware timers, Miduino.h will play polyphonic notes and noise for a retro sound!
 
 ![#Miduino GUI](https://i.imgur.com/YSRrHHq.jpg)
 ![#Miduino Results](https://i.imgur.com/im31iHA.jpg)
