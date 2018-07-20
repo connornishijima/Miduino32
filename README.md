@@ -1,3 +1,5 @@
+![Miduino for ESP32](https://i.imgur.com/xtJz2LX.jpg)
+
 # Miduino32
 
 Miduino32 is as it sounds: a MIDI music playback library compatible with the ESP32 under Arduino. Using some SigmaDelta trickery, Miduino32 will play polyphonic notes in the sample of your choice and 8-bit percussion for a retro sound!
