@@ -19,7 +19,7 @@ Some Features:
   - Analog output over the 2 ESP32 DAC pins, 25 and 26.
   - EQ options, allowing for fake low and high-pass filtering of playback
 
-# Gettting Started
+# Gettting Started (HARDWARE)
 
 To get your ESP32 started playing music, you'll need a few things:
 
@@ -28,6 +28,10 @@ To get your ESP32 started playing music, you'll need a few things:
 3. [4 ohm/3w Speaker](https://www.amazon.com/Cylewet-Diameter-Loudspeaker-Speaker-Arduino/dp/B01N1XLS87/ref=sr_1_4?ie=UTF8&qid=1547014341&sr=8-4&keywords=3w+4ohm)
 4. [PAM8403 Amplifier](https://www.amazon.com/CHENBO-PAM8403-digital-amplifier-efficient/dp/B01D4O2GI2/ref=sr_1_2?ie=UTF8&qid=1547014379&sr=8-2&keywords=pam8403)
 5. [10K ohm Potentiometer](https://www.amazon.com/HELLOYEE-Breadboard-Trim-Potentiometer-Arduino/dp/B01IK6GT1E/ref=sr_1_23?ie=UTF8&qid=1547014176&sr=8-23&keywords=potentiometer)
+
+If you already have an ESP32, the only thing you likely don't have a substitute for is the PAM8403 amplifier. Trust me, you need it, the ESP32 DACs are not powerful enough to drive a speaker unless you want to hold it up to your ear for testing. 
+
+## Parts
 
 ### ESP32 Microcontroller
 This one is fairly obvious, it's the brains of the operation!
@@ -43,3 +47,14 @@ This thing is amazing. I remember once trying to use an LM386 amp as a beginner,
 
 ### 10K Ohm Potentiometer
 This potentiometer sees one of it's most common use cases: a volume knob! And trust me, you'll want it. The 100K resistors keep the audio at a level safe of your ears, speakers and amp, but if you ever want to play with this while your family sleeps, they'll thank you for adding a potentiometer.
+
+## Wiring
+
+Once you have these parts on hand, here's how they need to be wired: (I'll post a proper schematic soon)
+
+    ESP32 | Pin 25 ---> 100K Resistor--+                                        |
+          |                            +--------->|POTENTIOMETER|---> "L" input | PAM8403 AMPLIFIER
+          | Pin 26 ---> 100K Resistor--+                |                       |
+          |                                             v                       |
+          | GND ----------------------------------------+-----> POWER/Input GND |
+          | 5V/Vin Pin ------------------------------------------------> 5V Pin |
