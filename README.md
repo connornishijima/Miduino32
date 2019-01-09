@@ -52,9 +52,46 @@ This potentiometer sees one of it's most common use cases: a volume knob! And tr
 
 Once you have these parts on hand, here's how they need to be wired: (I'll post a proper schematic soon)
 
-    ESP32 | Pin 25 ---> 100K Resistor--+                                        |
-          |                            +--------->|POTENTIOMETER|---> "L" input | PAM8403 AMPLIFIER
-          | Pin 26 ---> 100K Resistor--+                |                       |
-          |                                             v                       |
-          | GND ----------------------------------------+-----> POWER/Input GND |
-          | 5V/Vin Pin ------------------------------------------------> 5V Pin |
+    ESP32 | Pin 25 ---> 100K Resistor--+                                        |                   |
+          |                            +--------->|POTENTIOMETER|---> "L" input | PAM8403 AMPLIFIER | "L" + Output -----> SPEAKER +
+          | Pin 26 ---> 100K Resistor--+                |                       |                   | "L" - Output -----> SPEAKER -
+          |                                             v                       |                   |
+          | GND ----------------------------------------+-----> POWER/Input GND |                   |
+          | 5V/Vin Pin ------------------------------------------------> 5V Pin |                   |
+
+Okay, that was tougher than simply drawing one. Dang it.
+
+### Developers Note:
+
+While Miduino does use both DACs for output, it is not stereo, nor is it designed to be. Miduino has 8 internal "voices" for audio production, and puts 4 on one DAC, 4 on the other. At any time if there is less than 5 notes playing, they will only come out of one channel, making for boring/irritating stereo! This split to two channels was done to give each voice 64 steps of resolution, (6 bit) as opposed to just 32, (5 bit) for a higher quality sound. I know it's possible to let each voice potentially use the entire 8 bit space while others aren't playing, but these solutions require mixing algorithms that I either have not tried, or would be too taxing to run on this processor at an acceptable sampling rate. Any ideas welcome!
+
+## Getting Started (Software)
+
+Alright, we made it! Now the easy part. Open up the Miduino GUI .exe, and select the MIDI you want to convert! Documentation and downloads for that software is in it's separate repository, but to keep it simple: play around with "INSTRUMENT SAMPLE" to get different sounds from the final product!
+
+Assuming you've now used the GUI to convert a MIDI into an output Arduino Sketch, let's take a look at it:
+
+    #include "Miduino32.h" // https://github.com/connornishijima/Miduino32 
+    Miduino mid;           // hang.mid - Conversion took 0.069 seconds! Dropped 0 notes, removed 0 duplicates. Voices: 5/8
+
+    const uint16_t wave_len = 600;
+    uint8_t wave[wave_len] PROGMEM /* BIT CRUSH 2 */ = {106, 127, 128, 127, 128... ...127, 128, 127, 128};
+    const uint16_t attack_ms = 20;
+    const uint16_t decay_ms  = 20; // decay not fully working at this time
+
+    uint16_t my_score[] PROGMEM = {65078,193,65209,4233,65188,8329,65054,12352,90,32768,4233... ...65535};
+
+    void setup(){
+      mid.vibrato(true, 5, 500, 200); // Enable vibrato at 5Hz, starting after 500ms sustain, with intensity 200 / 1000
+      mid.play(my_score, wave, wave_len, attack_ms, decay_ms);
+      while (mid.playing) {
+        mid.run();
+        // Add your own code (to run during playback) above this line,
+        // but keep it brief to let the music run!
+      }
+    }
+
+    void loop(){
+    }
+    
+Not too shabby! A few things to look at, but pretty easy on the eyes considering what it does. (Most of the power is hidden in the Miduino32/Cone32 Library anyways.
