@@ -23,11 +23,11 @@ Some Features:
 
 To get your ESP32 started playing music, you'll need a few things:
 
-  - [ESP32 Microcontroller](https://www.amazon.com/ACROBOTIC-Development-Bluetooth-Raspberry-ESP-WROOM-32/dp/B01MTU49AT/ref=sr_1_9?ie=UTF8&qid=1547014214&sr=8-9&keywords=esp32+arduino)
-  - [2 100K ohm Resistors](https://www.amazon.com/Projects-100EP5121K00-Ohm-Resistors-Pack/dp/B0185FIJ9A/ref=sr_1_3?ie=UTF8&qid=1547014316&sr=8-3&keywords=1kohm+resistor)
-  - [4 ohm/3w Speaker](https://www.amazon.com/Cylewet-Diameter-Loudspeaker-Speaker-Arduino/dp/B01N1XLS87/ref=sr_1_4?ie=UTF8&qid=1547014341&sr=8-4&keywords=3w+4ohm)
-  - [PAM8403 Amplifier](https://www.amazon.com/CHENBO-PAM8403-digital-amplifier-efficient/dp/B01D4O2GI2/ref=sr_1_2?ie=UTF8&qid=1547014379&sr=8-2&keywords=pam8403)
-  - [10K ohm Potentiometer](https://www.amazon.com/HELLOYEE-Breadboard-Trim-Potentiometer-Arduino/dp/B01IK6GT1E/ref=sr_1_23?ie=UTF8&qid=1547014176&sr=8-23&keywords=potentiometer)
+1. [ESP32 Microcontroller](https://www.amazon.com/ACROBOTIC-Development-Bluetooth-Raspberry-ESP-WROOM-32/dp/B01MTU49AT/ref=sr_1_9?ie=UTF8&qid=1547014214&sr=8-9&keywords=esp32+arduino)
+2. [2 100K ohm Resistors](https://www.amazon.com/Projects-100EP5121K00-Ohm-Resistors-Pack/dp/B0185FIJ9A/ref=sr_1_3?ie=UTF8&qid=1547014316&sr=8-3&keywords=1kohm+resistor)
+3. [4 ohm/3w Speaker](https://www.amazon.com/Cylewet-Diameter-Loudspeaker-Speaker-Arduino/dp/B01N1XLS87/ref=sr_1_4?ie=UTF8&qid=1547014341&sr=8-4&keywords=3w+4ohm)
+4. [PAM8403 Amplifier](https://www.amazon.com/CHENBO-PAM8403-digital-amplifier-efficient/dp/B01D4O2GI2/ref=sr_1_2?ie=UTF8&qid=1547014379&sr=8-2&keywords=pam8403)
+5. [10K ohm Potentiometer](https://www.amazon.com/HELLOYEE-Breadboard-Trim-Potentiometer-Arduino/dp/B01IK6GT1E/ref=sr_1_23?ie=UTF8&qid=1547014176&sr=8-23&keywords=potentiometer)
 
 ### ESP32 Microcontroller
 This one is fairly obvious, it's the brains of the operation!
