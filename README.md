@@ -95,3 +95,7 @@ Assuming you've now used the GUI to convert a MIDI into an output Arduino Sketch
     }
     
 Not too shabby! A few things to look at, but pretty easy on the eyes considering what it does. (Most of the power is hidden in the Miduino32/Cone32 Library anyways.
+
+The first thing you'll notice when you convert your own files, is that my_score[] can be an insanely long list of numbers. This is where the song data is stored. Any time a note starts or stops, or Miduino must wait before another event occurs, that's another number or two in the list. (The example above has truncated waveform and score data and will not do anything interesting.)
+
+DEVELOPERS NOTE: If Arduino ever tells you the code won't fit "in region IRAM", it's 50/50 between simply being too big for the ESP32 flash storage, a it's a very bizarre bug. Apparently when single lines of Arduino code become insanely long, it will refuse to compile it until you break it up. Not a common issue unless you try to torture test it with 30-minute MIDIs or "Black MIDI", but the fix is to simply scroll a quarter of the way out, and add a line break. Repeat for another line, and another until you've run through the whole thing, to reduce the "width" of the code.
